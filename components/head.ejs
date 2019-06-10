@@ -5,4 +5,8 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&amp;subset=latin-ext">
 <link rel="stylesheet" href="/styles/main.css"/>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<% if (process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'development') { %>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+<% } else { %>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10"></script>
+<% } %>

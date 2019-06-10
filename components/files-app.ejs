@@ -10,8 +10,8 @@
       v-for="file in sortedFiles" v-bind:file="file"
       v-bind:list-view="listView"
       v-bind:uploaded="file.channelId !== null"
-      v-bind:ref="`fileAttachmentId${file.attachmentId}`"
-      v-bind:key="file.attachmentId"
+      v-bind:ref="`fileMessageId${file.messageId}`"
+      v-bind:key="file.messageId"
     ></file-card>
     <status-card
       v-bind:total-file-count="totalFileCount"

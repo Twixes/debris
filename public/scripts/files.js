@@ -137,10 +137,12 @@ const uploadCardComponent = Vue.component('upload-card', {
       // prepare
       const formData = new FormData(this.$el)
       const request = new XMLHttpRequest()
-      const provisionalId = this.$root.files.length ? incrementIntegerString(this.$root.files[0].attachmentId) : '0'
+      const provisionalMessageId = (
+        this.$root.files.length ? incrementIntegerString(this.$root.files[0].messageId) : '0'
+      )
       let newFile = {
-        attachmentId: provisionalId,
-        messageId: null,
+        attachmentId: null,
+        messageId: provisionalMessageId,
         channelId: null,
         guildId: null,
         ownerId: null,
@@ -190,10 +192,10 @@ const uploadCardComponent = Vue.component('upload-card', {
             case 201:
               const responseJSON = JSON.parse(request.responseText)
               for (const key in responseJSON) {
-                // set actual values except attachmentId
-                // as attachmentId is also component key and changing that causes complete rerender
-                if (key !== 'attachmentId') {
-                  Vue.set(this.$root.$refs[`fileAttachmentId${provisionalId}`][0].file, key, responseJSON[key])
+                // set actual values except messageId
+                // as messageId is also component key and changing that causes complete element rerender
+                if (key !== 'messageId') {
+                  Vue.set(this.$root.$refs[`fileMessageId${provisionalMessageId}`][0].file, key, responseJSON[key])
                 }
               }
               this.$root.totalFileCount++
@@ -204,7 +206,9 @@ const uploadCardComponent = Vue.component('upload-card', {
             case 500:
             default:
               newFile.name = 'Could not upload file'
-              Vue.set(this.$root.$refs[`fileAttachmentId${provisionalId}`][0].file, 'deletingInProgressOrError', true)
+              Vue.set(
+                this.$root.$refs[`fileMessageId${provisionalMessageId}`][0].file, 'deletingInProgressOrError', true
+              )
           }
           Vue.set(newFile, 'uploadProgress', 1)
         }

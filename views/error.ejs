@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html class="<% if (user && user.lightTheme) { %>light<% } else { %>dark<% } %>-theme">
+  <head>
+    <title><%= errorCode %> – Debris</title>
+    <%- include ../components/head %>
+  </head>
+  <body>
+    <%- include ../components/user-menu %>
+    <%- include ../components/header %>
+    <main>
+      <div class="page__name"><%= errorMessage %></div>
+      <div class="page__error-code"><%= errorCode %></div>
+    </main>
+    <script src="/scripts/main.js"></script>
+  </body>
+</html>

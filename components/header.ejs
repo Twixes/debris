@@ -1,0 +1,24 @@
+<header>
+  <div class="header__content">
+    <a href="/"><div class="header__logo">Debris</div></a>
+    <% if (user) { %>
+      <div id="user-button" class="header__user-button">
+        <span class="header__login"><%= user.username %>#<%= user.discriminator %></span>
+        <% if (user.avatar) { %>
+          <img class="header__picture"
+          src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>?size=128">
+        <% } else { %>
+          <img class="header__picture"
+          src="https://cdn.discordapp.com/embed/avatars/<%= user.discriminator % 5 %>.png">
+        <% } %>
+      </div>
+    <% } else { %>
+      <!--<a href="/login">
+        <div class="header__user-button">
+          <span class="header__login">Log in with Discord</span>
+          <img class="header__discord-logo" src="/images/discord-logo.svg">
+        </div>
+      </a>-->
+    <% } %>
+  </div>
+</header>

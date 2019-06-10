@@ -1,0 +1,13 @@
+<% if (user) { %>
+  <div id="upload-menu" class="upload-menu">
+    <div class="page__name">Upload</div>
+    <form id="upload-form">
+      <input id="upload-form-file-input" class="upload-form-file-input" type="file" name="file">
+      <label id="upload-form-file-label" class="upload-form-file-label" for="upload-form-file-input">Choose a file</label>
+      <button id="upload-form-button" class="header__button header__button--upload" type="button">Upload</button>
+      <div id="upload-form-progress" class="upload-form-progress">
+        <div id="upload-form-progress-fill" class="upload-form-progress-fill" style="width: 0%"></div>
+      </div>
+    </form>
+  </div>
+<% } %>

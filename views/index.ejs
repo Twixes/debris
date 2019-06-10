@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html class="<% if (user && user.lightTheme) { %>light<% } else { %>dark<% } %>-theme">
+  <head>
+    <title><%= user ? 'Files' : 'Welcome' %> – Debris</title>
+    <%- include ../components/head %>
+  </head>
+  <body>
+    <%- include ../components/user-menu %>
+    <%- include ../components/header %>
+    <main>
+      <% if (user) { %>
+        <%- include ../components/files-app %>
+      <% } else { %>
+        <%- include ../components/welcome %>
+      <% } %>
+    </main>
+    <% if (user) { %>
+      <script src="/scripts/files.js"></script>
+    <% } %>
+    <script src="/scripts/main.js"></script>
+  </body>
+</html>

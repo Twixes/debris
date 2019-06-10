@@ -1,0 +1,37 @@
+{
+  "name": "debris",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "standard | snazzy"
+  },
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "bufferutil": "^3.0.3",
+    "cookie-parser": "^1.4.4",
+    "chalk": "^2.4.2",
+    "debug": "^4.1.1",
+    "discord.js": "^11.4.2",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "erlpack": "discordapp/erlpack",
+    "express": "^4.16.4",
+    "file-type": "^10.9.0",
+    "filesize": "^4.1.2",
+    "http-errors": "^1.7.2",
+    "metrohash": "^2.6.0",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.1",
+    "mysql": "^2.16.0",
+    "node-fetch": "^2.3.0",
+    "node-sass-middleware": "^0.11.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "sharp": "^0.22.1"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1",
+    "snazzy": "^8.0.0"
+  }
+}

@@ -1,6 +1,6 @@
 # Debris
 
-Discord-based file storage built with Express and Vue.
+Discord-based file hosting built with Express and Vue.
 
 ## Design
 

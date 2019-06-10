@@ -28,7 +28,7 @@ app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
   indentedSyntax: false,
-  sourceMap: process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'development'
+  sourceMap: process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase().startsWith('dev')
 }))
 app.use(express.static(path.join(__dirname, 'public')))
 

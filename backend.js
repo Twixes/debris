@@ -37,7 +37,7 @@ SQLConnection.query(
     userId VARCHAR(22) CHARACTER SET ascii,
     username VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     discriminator CHAR(4) CHARACTER SET ascii,
-    inTimeframeCount MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
+    inFrameCount MEDIUMINT UNSIGNED NOT NULL DEFAULT 1,
     timestamp TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     FOREIGN KEY (userId) REFERENCES users(id)
   )`,
@@ -227,7 +227,7 @@ const backend = {
       )
     } else {
       await SQLConnection.query(
-        `UPDATE accesses SET inTimeframeCount = inTimeframeCount + 1 WHERE hash = ?`,
+        `UPDATE accesses SET inFrameCount = inFrameCount + 1 WHERE hash = ?`,
         [hash]
       )
     }

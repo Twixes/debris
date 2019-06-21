@@ -27,7 +27,11 @@ class BotNotReadyError extends Error {
 }
 
 function log(message, color) {
-  console.log(`[discord-app] ${botReady ? chalk.green('READY') : chalk.red('NOT READY')}${message ? ' ' : ''}${color ? chalk[color](message) : message || ''}`)
+  console.log(
+    `${chalk.bgBlack.white('discord-app')} ` +
+    `${botReady ? chalk.bgGreen.black('READY') : chalk.bgBlack.red('NOT READY')}${message ? ' ' : ''}` +
+    `${color ? chalk[color](message) : message || ''}`
+  )
 }
 
 function findStorageGuild() {

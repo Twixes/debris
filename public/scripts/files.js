@@ -16,6 +16,13 @@ function incrementIntegerString(integerString) {
   return digits.join('')
 }
 
+const counterComponent = Vue.component('counter', {
+  props: {
+    count: { type: Number, required: false }
+  },
+  template: `<div class="page__counter" v-cloak>{{count !== null ? count : '?'}}</div>`
+})
+
 const fileCardComponent = Vue.component('file-card', {
   props: {
     file: { type: Object, required: true },

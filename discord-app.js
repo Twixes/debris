@@ -2,13 +2,13 @@
 
 const discord = require('discord.js')
 const chalk = require('chalk')
+const Sentry = require('@sentry/node')
 const client = new discord.Client()
 
-// CONFIGURATION
+// DEBUG FLAGS
 
 const resetStorageGuild = false // set to true to delete the existing storage guild on login and create a new one
 const deleteAllFilesOnReady = false // set to true to delete all files in the storage guild
-const updateStorageGuildOnReady = false // set to false to not update storage guild
 const printStorageGuildInviteURLOnReady = false // set to true to get an invite to the storage guild
 
 // GLOBALS
@@ -81,10 +81,15 @@ async function ensureStorageGuildExistence(resetStorageGuild = false) {
   }
 }
 
-async function updateStorageGuild() {
+async function fetchAndApplyApplication() {
   // keep storage guild details in sync with the API application
   log(`Updating storage guild...`, 'blue')
   const application = await client.fetchApplication()
+  Sentry.configureScope(scope => {
+    scope.setUser({
+      id: application.owner.id, username: `${application.owner.username}#${application.owner.discriminator}`
+    })
+  })
   await storageGuild.setName(application.name)
   await storageGuild.setIcon(application.iconURL)
   log(`Updated storage guild`, 'green')
@@ -103,7 +108,7 @@ client.on('ready', async () => {
   await purgeUnwantedGuilds(resetStorageGuild)
   await ensureStorageGuildExistence(resetStorageGuild)
   if (printStorageGuildInviteURLOnReady) await printStorageGuildInviteURL()
-  if (updateStorageGuildOnReady) await updateStorageGuild()
+  await fetchAndApplyApplication()
   botReady = true
   log()
 })

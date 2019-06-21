@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 require('dotenv').config()
+if (process.env.DEBRIS_SENTRY_BACKEND_DSN) require('@sentry/node').init({ dsn: process.env.DEBRIS_SENTRY_BACKEND_DSN })
 
 const app = require('../app')
 const debug = require('debug')('debris:server')

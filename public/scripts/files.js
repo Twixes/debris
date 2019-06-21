@@ -285,7 +285,7 @@ const filesApp = new Vue({
   },
   computed: {
     sortedFiles() {
-      return this.files.sort((a, b) => a.uploadTimestamp < b.uploadTimestamp)
+      return this.files.sort((a, b) => a.messageId < b.messageId)
     },
     filesToLoadCurrently() {
       return (

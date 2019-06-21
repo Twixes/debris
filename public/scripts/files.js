@@ -16,14 +16,14 @@ function incrementIntegerString(integerString) {
   return digits.join('')
 }
 
-const counterComponent = Vue.component('counter', {
+Vue.component('counter', {
   props: {
     count: { type: Number, required: false }
   },
   template: `<div class="page__counter" v-cloak>{{count !== null ? count : '?'}}</div>`
 })
 
-const fileCardComponent = Vue.component('file-card', {
+Vue.component('file-card', {
   props: {
     file: { type: Object, required: true },
     listView: { type: Boolean, required: true }
@@ -135,7 +135,7 @@ const fileCardComponent = Vue.component('file-card', {
   `
 })
 
-const uploadCardComponent = Vue.component('upload-card', {
+Vue.component('upload-card', {
   props: {
     uploadErrorMessage: { type: String, required: false }
   },
@@ -242,7 +242,7 @@ const uploadCardComponent = Vue.component('upload-card', {
   `
 })
 
-const statusCardComponent = Vue.component('status-card', {
+Vue.component('status-card', {
   props: {
     totalFileCount: { type: Number, required: false },
     filesToLoadCurrently: { type: Number, required: false },

@@ -5,7 +5,7 @@ Discord-based file hosting built with Express and Vue.
 ## Design
 
 ### Header
-<img src="README_HEADER.png?"></img>
+<img src="README-HEADER.png"></img>
 Always present at the top of the screen, it is used for app navigation and control.  
 It is composed of the following components:
 
@@ -19,7 +19,7 @@ The button representing the currently logged in user. Clicking on it opens the u
 User controls, such as the theme switcher or the logout button.
 
 ### Files view
-<img src="README_FILES_VIEW.png"></img>
+<img src="README-FILES-VIEW.png"></img>
 Within it integrated is the files managament interface, displayed to logged in users at `/`.  
 It is composed of the following components:
 

@@ -41,10 +41,10 @@ const fileCardComponent = Vue.component('file-card', {
             this.$root.loadMoreFiles()
           }, 400)
         } else {
-          Vue.set(this.file, 'name', 'Could not delete file')
+          Vue.set(this.file, 'name', `ERROR – ${this.file.name}`)
         }
       } catch (e) {
-        Vue.set(this.file, 'name', 'Could not delete file')
+        Vue.set(this.file, 'name', `ERROR – ${this.file.name}`)
       }
     }
   },
@@ -205,7 +205,7 @@ const uploadCardComponent = Vue.component('upload-card', {
             case 413:
             case 500:
             default:
-              newFile.name = 'Could not upload file'
+              newFile.name = `ERROR – ${newFile.name}`
               Vue.set(
                 this.$root.$refs[`fileMessageId${provisionalMessageId}`][0].file, 'deletingInProgressOrError', true
               )

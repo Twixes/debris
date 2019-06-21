@@ -11,47 +11,54 @@ function switchTheme() {
   })
 }
 
-const userMenuController = {
-  button: document.getElementById('user-button'),
-  menu: document.getElementById('user-menu'),
+const userMenu = {
+  isShown: false,
+  height: '6rem',
+  element: document.getElementById('user-menu'),
+  buttonElement: document.getElementById('user-button'),
   initialize() {
-    if (this.menu) {
-      this.positionMenu()
-      addEventListener('resize', this.positionMenu)
-      addEventListener('keydown', this.hideMenuOnEscDown)
-      this.button.addEventListener('click', this.showMenu)
+    if (this.element) {
+      this.position()
+      addEventListener('resize', this.position)
+      addEventListener('keydown', this.hide)
+      userMenu.buttonElement.addEventListener('click', userMenu.show)
+      userMenu.buttonElement.addEventListener('touchend', userMenu.show)
       document.getElementById('switch-theme-button').addEventListener('click', switchTheme)
     }
   },
-  positionMenu() {
-    userMenuController.menu.style.width = `${userMenuController.button.offsetWidth}px`
-    userMenuController.menu.style.left = `${
-      userMenuController.button.offsetLeft + userMenuController.button.offsetWidth - userMenuController.menu.offsetWidth
+  position() {
+    userMenu.element.style.width = `${userMenu.buttonElement.offsetWidth}px`
+    userMenu.element.style.left = `${
+      userMenu.buttonElement.offsetLeft + userMenu.buttonElement.offsetWidth - userMenu.element.offsetWidth
     }px`
   },
-  showMenu() {
-    const menuHeight = '6rem'
-    if (userMenuController.menu.style.height === menuHeight) return // don't do anything if the menu already is open
-    clearTimeout(userMenuController.hidingTimeout)
-    userMenuController.menu.style.visibility = 'visible'
-    userMenuController.menu.style.height = menuHeight
+  toggle() {
+    if (userMenu.isShown) userMenu.isShown = false
+    else userMenu.isShown = true
+  },
+  show(e) {
+    if (userMenu.isShown) return // if menu already is shown, do nothing
+    userMenu.isShown = true
+    clearTimeout(userMenu.hidingTimeout)
+    userMenu.element.style.visibility = 'visible'
+    userMenu.element.style.height = userMenu.height
     setTimeout(() => {
-      document.body.addEventListener('click', userMenuController.hideMenu)
-      document.body.addEventListener('touchend', userMenuController.hideMenu) // iOS Safari doesn't fire click on body
+      document.body.addEventListener('click', userMenu.hide)
+      document.body.addEventListener('touchend', userMenu.hide)
     }, 10)
   },
-  hideMenu(e) {
-    if (e && e.composedPath().includes(userMenuController.menu)) return // hide only on non-menu click
-    userMenuController.menu.style.height = '0'
-    document.body.removeEventListener('click', userMenuController.hideMenu)
-    document.body.removeEventListener('touchend', userMenuController.hideMenu)
-    userMenuController.hidingTimeout = setTimeout(() => {
-      userMenuController.menu.style.visibility = 'hidden'
+  hide(e) {
+    if (!userMenu.isShown) return // if menu already is hidden, do nothing
+    if (e && e.composedPath().includes(userMenu.element)) return // if event is mouse-based, do nothing on menu click
+    if (e && e.keyCode && e.keyCode !== 27) return // if event is keyboard-based, do nothing on non-Esc click
+    userMenu.isShown = false
+    userMenu.element.style.height = '0'
+    document.body.removeEventListener('click', userMenu.hide)
+    document.body.removeEventListener('touchend', userMenu.hide)
+    userMenu.hidingTimeout = setTimeout(() => {
+      userMenu.element.style.visibility = 'hidden'
     }, 200)
-  },
-  hideMenuOnEscDown(e) {
-    if (e.keyCode === 27) userMenuController.hideMenu()
   }
 }
 
-userMenuController.initialize()
+userMenu.initialize()

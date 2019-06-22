@@ -94,8 +94,8 @@ async function fetchAndApplyApplication() {
       id: application.owner.id, username: `${application.owner.username}#${application.owner.discriminator}`
     })
   })
-  storageGuild.setName(application.name)
-  storageGuild.setIcon(application.iconURL)
+  await storageGuild.setName(application.name)
+  await storageGuild.setIcon(application.iconURL)
   log(`Updated storage guild`, 'green')
 }
 

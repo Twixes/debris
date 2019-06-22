@@ -1,6 +1,8 @@
 /* eslint-env browser */
 /* eslint-disable space-before-function-paren */
-/* globals Vue */
+/* globals Vue, animateCSSGrid */
+
+const gridAnimationDuration = 200
 
 function incrementIntegerString(integerString) {
   const digits = integerString.split('').map(digitString => parseInt(digitString))
@@ -40,13 +42,10 @@ Vue.component('file-card', {
           headers: new Headers({ 'Content-Type': 'application/json' })
         })
         if ([204, 404].includes(response.status)) {
-          Vue.set(this.file, 'deleted', true)
           this.$root.totalFileCount--
-          setTimeout(() => {
-            const indexOfFile = filesApp.files.findIndex(file => file.attachmentId === this.file.attachmentId)
-            if (indexOfFile >= 0) Vue.delete(filesApp.files, indexOfFile)
-            this.$root.loadMoreFiles()
-          }, 400)
+          const indexOfFile = filesApp.files.findIndex(file => file.attachmentId === this.file.attachmentId)
+          if (indexOfFile >= 0) Vue.delete(filesApp.files, indexOfFile)
+          setTimeout(this.$root.loadMoreFiles, gridAnimationDuration)
         } else {
           Vue.set(this.file, 'name', `ERROR – ${this.file.name}`)
         }
@@ -60,9 +59,9 @@ Vue.component('file-card', {
       class="card file"
       v-bind:class="{
         'card--positive-state': file.uploadProgress !== undefined && file.uploadProgress !== 1,
-        'card--negative-state': file.deletingInProgressOrError, 'file--deleted': file.deleted
+        'card--negative-state': file.deletingInProgressOrError
       }"
-    >
+    ><div>
       <a v-if="!listView" v-bind:href="file.url" target="_blank"><div class="file__preview-box">
         <template v-if="['image/jpeg', 'image/png', 'image/webp', 'image/tiff'].includes(file.mime)">
         <picture>
@@ -131,7 +130,7 @@ Vue.component('file-card', {
           v-bind:style="{ width: file.uploadProgress !== undefined ? \`\${file.uploadProgress * 100}%\` : '100%' }"
         ></div>
       </div>
-    </div>
+    </div></div>
   `
 })
 
@@ -233,12 +232,12 @@ Vue.component('upload-card', {
       class="card card--full-width card--positive-state upload"
       action="/api/upload-file" method="post" enctype="multipart/form-data"
       v-bind:class="{ 'card--negative-state': uploadErrorMessage }"
-    >
+    ><div>
       <input
         id="upload-file" class="upload__input" type="file" name="file" ref="uploadInput" v-on:change="beginUpload()"
       >
       <label for="upload-file" class="upload__label">{{uploadErrorMessage || 'Upload'}}</label>
-    </form>
+    </div></form>
   `
 })
 
@@ -260,7 +259,7 @@ Vue.component('status-card', {
       v-bind:class="{ 'card--negative-state': loadingError }"
       v-bind:style="{ 'cursor': !loadingError && filesToLoadCurrently && !loadingInProgress ? 'pointer' : 'default '}"
       v-on:click="handleClick()"
-    >
+    ><div class="card--full-width">
       <div class="card__content">
         <template v-if="loadingError">Could not load files</template>
         <template v-else-if="loadingInProgress">Loading {{filesToLoadCurrently === 1 ? 'file' : 'files'}}...</template>
@@ -271,7 +270,7 @@ Vue.component('status-card', {
         <template v-else>No files yet</template>
       </div>
       <div class="progress-bar" ref="progressBar"></div>
-    </div>
+    </div></div>
   `
 })
 
@@ -340,7 +339,8 @@ const filesApp = new Vue({
       this.loadingInProgress = false
     }
   },
-  created() {
+  mounted() {
+    animateCSSGrid.wrapGrid(document.querySelector('.cards-grid'), { duration: gridAnimationDuration })
     this.loadMoreFiles()
   }
 })

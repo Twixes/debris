@@ -408,13 +408,9 @@ header {
 }
 
 .file {
-  animation: expandFile var(--time-medium) var(--bezier-curve-standard);
   min-width: 0;
   height: 20rem;
   margin-bottom: 1rem;
-  &.file--deleted {
-    animation: collapseFile var(--time-medium) var(--bezier-curve-standard) forwards;
-  }
   .list-view & {
     height: 4rem;
   }
@@ -514,20 +510,6 @@ header {
 }
 
 // ANIMATIONS
-
-@keyframes expandFile {
-  0% {
-    height: 0;
-    margin-bottom: 0;
-  } 100% { }
-}
-
-@keyframes collapseFile {
-  0% { } 100% {
-    height: 0;
-    margin-bottom: 0;
-  }
-}
 
 @keyframes fadeIn {
   0% {

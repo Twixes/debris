@@ -14,8 +14,8 @@ function switchTheme() {
 const userMenu = {
   isShown: false,
   height: '6rem',
-  element: document.getElementById('user-menu'),
-  buttonElement: document.getElementById('user-button'),
+  element: document.querySelector('.user-menu'),
+  buttonElement: document.querySelector('.header__user-button'),
   initialize() {
     if (this.element) {
       this.position()
@@ -23,7 +23,7 @@ const userMenu = {
       addEventListener('keydown', this.hide)
       userMenu.buttonElement.addEventListener('click', userMenu.show)
       userMenu.buttonElement.addEventListener('touchend', userMenu.show)
-      document.getElementById('switch-theme-button').addEventListener('click', switchTheme)
+      document.querySelector('.user-menu__button--switch-theme').addEventListener('click', switchTheme)
     }
   },
   position() {

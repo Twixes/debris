@@ -5,7 +5,9 @@ const fetch = require('node-fetch')
 const fileType = require('file-type')
 const MetroHash64 = require('metrohash').MetroHash64
 const errors = require('./errors')
-const discordApp = require('./discord-app')
+const DiscordStorage = require('./discord-storage')
+
+const discordStorage = new DiscordStorage(process.env.DEBRIS_BOT_TOKEN)
 
 // SQL SETUP
 
@@ -438,7 +440,7 @@ const backend = {
    */
   async saveFile(ownerId, name, buffer) {
     const type = fileType(buffer)
-    const file = await discordApp.uploadFileToStorageServer(ownerId, name, buffer)
+    const file = await discordStorage.uploadFileToStorageServer(ownerId, name, buffer)
     file.extension = this.extractFileExtension(name)
     file.mime = type ? type.mime : null
     file.url = this.generateFileURL(file)
@@ -493,7 +495,7 @@ const backend = {
     const file = await this.getFile(attachmentId)
     if (file && file.name === name) {
       if (requestingUserId === file.ownerId) {
-        await discordApp.deleteFileFromStorageServer(file.channelId, file.messageId)
+        await discordStorage.deleteFileFromStorageServer(file.channelId, file.messageId)
         await pool.query(
           'DELETE FROM files WHERE attachmentId = ?',
           file.attachmentId

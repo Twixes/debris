@@ -9,7 +9,7 @@ const discordApp = require('./discord-app')
 
 // SQL SETUP
 
-const SQLConnection = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env.DEBRIS_MYSQL_HOST || 'localhost',
   port: process.env.DEBRIS_MYSQL_PORT || 3306,
   user: process.env.DEBRIS_MYSQL_USER,
@@ -18,8 +18,7 @@ const SQLConnection = mysql.createConnection({
   charset: 'utf8mb4'
 })
 
-SQLConnection.connect((err) => { if (err) throw err })
-SQLConnection.query(
+pool.query(
   `CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(24) CHARACTER SET ascii NOT NULL PRIMARY KEY,
     lightTheme BOOL NOT NULL DEFAULT FALSE,
@@ -28,7 +27,7 @@ SQLConnection.query(
   )`,
   err => { if (err) throw err }
 )
-SQLConnection.query(
+pool.query(
   `CREATE TABLE IF NOT EXISTS accesses (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     hash CHAR(16) CHARACTER SET ascii NOT NULL,
@@ -43,7 +42,7 @@ SQLConnection.query(
   )`,
   err => { if (err) throw err }
 )
-SQLConnection.query(
+pool.query(
   `CREATE TABLE IF NOT EXISTS files (
     attachmentId VARCHAR(22) CHARACTER SET ascii NOT NULL PRIMARY KEY,
     messageId VARCHAR(22) CHARACTER SET ascii NOT NULL UNIQUE KEY,
@@ -186,12 +185,12 @@ const backend = {
    */
   async getDebrisUser(userId) {
     // ensure user registration
-    await SQLConnection.query(
+    await pool.query(
       'INSERT IGNORE INTO users (id) VALUES (?)',
       userId
     )
     const localUserRows = await new Promise((resolve, reject) => {
-      SQLConnection.query(
+      pool.query(
         'SELECT * FROM users WHERE id = ?',
         userId,
         (err, result) => {
@@ -221,12 +220,12 @@ const backend = {
     if (user) hashObject.update(user.id).update(user.username).update(user.discriminator)
     const hash = hashObject.digest()
     if (await backend.isAccessRecentlyUnique(hash)) {
-      await SQLConnection.query(
+      await pool.query(
         'INSERT INTO accesses (hash, ip, userAgent, userId, username, discriminator) VALUES (?, ?, ?, ?, ?, ?)',
         [hash, ip, userAgent, ...(user ? [user.id, user.username, user.discriminator] : [null, null, null])]
       )
     } else {
-      await SQLConnection.query(
+      await pool.query(
         `UPDATE accesses SET inFrameCount = inFrameCount + 1 WHERE hash = ?`,
         [hash]
       )
@@ -255,7 +254,7 @@ const backend = {
         queryParts.push('filesListView = ?')
         user.filesListView = patch.filesListView
       }
-      await SQLConnection.query(
+      await pool.query(
         `UPDATE users SET ${queryParts.join(' ')} WHERE id = ?`,
         [...values, user.id],
         (err, result) => { if (err) throw err }
@@ -271,7 +270,7 @@ const backend = {
    */
   async isAccessRecentlyUnique(hash) {
     const accessRows = await new Promise((resolve, reject) => {
-      SQLConnection.query(
+      pool.query(
         'SELECT * FROM accesses WHERE hash = ? AND timestamp >= NOW() - INTERVAL 5 MINUTE',
         hash,
         (err, result) => {
@@ -292,7 +291,7 @@ const backend = {
    */
   async getFile(attachmentId, name, requestingUserId) {
     const fileRows = await new Promise((resolve, reject) => {
-      SQLConnection.query(
+      pool.query(
         'SELECT * FROM files WHERE attachmentId = ?',
         attachmentId,
         (err, result) => {
@@ -343,7 +342,7 @@ const backend = {
     if (after) queryValues.push(after)
     if (limit >= 0) queryValues.push(limit)
     const fileRows = await new Promise((resolve, reject) => {
-      SQLConnection.query(
+      pool.query(
         `SELECT * FROM files WHERE ownerId = ?${before ? ' AND uploadTimestamp < ?' : ''}
         ${after ? ' AND uploadTimestamp > ?' : ''} ORDER BY uploadTimestamp${limit >= 0 ? ' DESC LIMIT ?' : ''}`,
         queryValues,
@@ -387,7 +386,7 @@ const backend = {
     if (before) queryValues.push(before)
     if (after) queryValues.push(after)
     const fileCountRows = await new Promise((resolve, reject) => {
-      SQLConnection.query(
+      pool.query(
         `SELECT COUNT(*) AS fileCount FROM files WHERE ownerId = ?
         ${before ? ' AND uploadTimestamp < ?' : ''}${after ? ' AND uploadTimestamp > ?' : ''}`,
         queryValues,
@@ -443,7 +442,7 @@ const backend = {
     file.extension = this.extractFileExtension(name)
     file.mime = type ? type.mime : null
     file.url = this.generateFileURL(file)
-    await SQLConnection.query(
+    await pool.query(
       `INSERT INTO files (
         attachmentId, messageId, channelId, guildId, ownerId, safeName, name, extension, mime, size, height, width, uploadTimestamp
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, FROM_UNIXTIME(? / 1000))`, [
@@ -468,7 +467,7 @@ const backend = {
       if (requestingUserId === file.ownerId) {
         if (patch.name !== undefined) {
           file.lightTheme = patch.lightTheme
-          await SQLConnection.query(
+          await pool.query(
             `UPDATE files SET name = ? WHERE attachmentId = ?`,
             [file.name, file.attachmentId],
             (err, result) => { if (err) throw err }
@@ -495,7 +494,7 @@ const backend = {
     if (file && file.name === name) {
       if (requestingUserId === file.ownerId) {
         await discordApp.deleteFileFromStorageServer(file.channelId, file.messageId)
-        await SQLConnection.query(
+        await pool.query(
           'DELETE FROM files WHERE attachmentId = ?',
           file.attachmentId
         )

@@ -323,14 +323,13 @@ header {
 .card {
   transition: height var(--time-medium) var(--bezier-curve-standard), background var(--time-short) var(--bezier-curve-standard);
   background: #fff;
+  fill: #000;
   border-radius: 3px;
   box-shadow: var(--shadow-elevation-1);
   overflow: hidden;
   .dark-theme & {
     background: var(--color-dark-0);
-  }
-  &.card--negative-state {
-    background: var(--color-red) !important;
+    fill: #fff;
   }
 }
 
@@ -461,10 +460,6 @@ header {
 .file__details {
   height: 4rem;
   background: var(--color-blurple);
-  fill: #000;
-  .dark-theme & {
-    fill: #fff;
-  }
 }
 
 .file__details-content {

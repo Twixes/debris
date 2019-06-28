@@ -229,9 +229,12 @@ Vue.component('upload-card', {
   },
   template: `
     <form
-      class="card card--full-width card--positive-state upload"
+      class="card card--full-width upload"
       action="/api/upload-file" method="post" enctype="multipart/form-data"
-      v-bind:class="{ 'card--negative-state': uploadErrorMessage }"
+      v-bind:class="{
+        'card--positive-state': !uploadErrorMessage,
+        'card--negative-state': uploadErrorMessage
+      }"
     ><div>
       <input
         id="upload-file" class="upload__input" type="file" name="file" ref="uploadInput" v-on:change="beginUpload()"
@@ -255,8 +258,11 @@ Vue.component('status-card', {
   },
   template: `
     <div
-      class="card card--full-width card--positive-state status"
-      v-bind:class="{ 'card--negative-state': loadingError }"
+      class="card card--full-width status"
+      v-bind:class="{
+        'card--positive-state': !loadingError,
+        'card--negative-state': loadingError
+      }"
       v-bind:style="{ 'cursor': !loadingError && filesToLoadCurrently && !loadingInProgress ? 'pointer' : 'default '}"
       v-on:click="handleClick()"
     ><div class="card--full-width">

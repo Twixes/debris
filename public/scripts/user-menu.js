@@ -17,14 +17,12 @@ const userMenu = {
   element: document.querySelector('.user-menu'),
   buttonElement: document.querySelector('.header__user-button'),
   initialize() {
-    if (this.element) {
-      this.position()
-      addEventListener('resize', this.position)
-      addEventListener('keydown', this.hide)
-      userMenu.buttonElement.addEventListener('click', userMenu.show)
-      userMenu.buttonElement.addEventListener('touchend', userMenu.show)
-      document.querySelector('.user-menu__button--switch-theme').addEventListener('click', switchTheme)
-    }
+    this.position()
+    addEventListener('resize', this.position)
+    addEventListener('keydown', this.hide)
+    userMenu.buttonElement.addEventListener('click', userMenu.show)
+    userMenu.buttonElement.addEventListener('touchend', userMenu.show)
+    document.querySelector('.user-menu__button--switch-theme').addEventListener('click', switchTheme)
   },
   position() {
     userMenu.element.style.width = `${userMenu.buttonElement.offsetWidth}px`

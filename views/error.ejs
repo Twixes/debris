@@ -11,6 +11,8 @@
       <div class="page__name"><%= errorMessage %></div>
       <div class="page__error-code"><%= errorCode %></div>
     </main>
-    <script src="/scripts/main.js"></script>
+    <% if (user) { %>
+      <script src="/scripts/user-menu.js"></script>
+    <% } %>
   </body>
 </html>

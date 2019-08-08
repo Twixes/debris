@@ -72,6 +72,10 @@ Note that while images can be resized, they cannot be enlarged, due to balooning
 
 ##### Example file path with processing parameters: `/files/587605115746123786/ABC.png?height=720&format=jpeg&quality=70`  
 
+## API
+
+The API specification is defined in [API.md](API.md).
+
 ## How to run
 
 To run Debris on your own you are going to need the following packages installed in your system:

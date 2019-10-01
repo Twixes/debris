@@ -2,7 +2,7 @@
 
 Current version base API path is `/api/v1`. All endpoint paths below are its subpaths.  
 
-All requests must be `Bearer` authorized with the `Authorization` header containing the `identify` scope Discord access token obtained through OAuth2 authorization flow and stored as a cookie. Alternatively, the access token may be passed as request paramater `accesToken`.
+All requests must be `Bearer` authorized with the `Authorization` header containing the `identify` scope Discord access token obtained through OAuth2 authorization flow and stored as a cookie. Alternatively, the access token may be passed as request paramater `accessToken`.
 
 
 ## Objects

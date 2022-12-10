@@ -17,7 +17,7 @@
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "erlpack": "discordapp/erlpack",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "file-type": "^10.9.0",
     "filesize": "^4.1.2",
     "http-errors": "^1.7.2",
